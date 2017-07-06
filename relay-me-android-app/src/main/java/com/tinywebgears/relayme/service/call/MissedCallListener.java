@@ -25,7 +25,7 @@ public class MissedCallListener extends PhoneStateListener
 
     {
         try {
-            this.getClass().getField("mSubId").set(this, subscriptionId);
+            this.getClass().getSuperclass().getDeclaredField("mSubId").set(this, subscriptionId);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
