@@ -157,13 +157,21 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
             }
             String contactName = ContactsIntentService
                     .findContactName(userData.getContacts(), message.getPhoneNumber());
+
+            String simContactName = ContactsIntentService
+                    .findContactName(userData.getContacts(), simNumber);
+
+            if (simContactName == null || simContactName == "") {
+                simContactName = simNumber;
+            }
+
             if (message.getMessageType() == MessageType.INCOMING)
             {
                 String eventType = getString(message.getEventType().getNameResource());
-                subject = getString(R.string.str_email_subject_with_sim_ts, eventType, message.getPhoneNumber(), simNumber, message.getTimestamp() );
+                subject = getString(R.string.str_email_subject_with_sim_ts, eventType, message.getPhoneNumber(), simContactName, message.getTimestamp() );
                 if (StringUtil.nonEmpty(contactName))
                     subject = getString(R.string.str_email_subject_with_name_sim_ts, eventType, message.getPhoneNumber(),
-                            contactName, simNumber, message.getTimestamp());
+                            contactName, simContactName, message.getTimestamp());
                 String prefix = userData.getMessagingConfiguration().getEmailSubjectPrefix();
                 if (!StringUtil.empty(prefix))
                     subject = prefix + " " + subject;
