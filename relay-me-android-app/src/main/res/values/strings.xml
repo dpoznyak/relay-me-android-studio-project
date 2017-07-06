@@ -260,9 +260,9 @@
     <string name="str_email_status_body_succeeded">Your text was successfully sent.\n\n%s</string>
     <string name="str_email_status_body_failed">I detected an error while sending the text. It might have failed. You might want to try again.\n\n%s</string>
     <string name="str_email_subject">%1$s from %2$s</string>
-    <string name="str_email_subject_with_sim">%1$s from %2$s [%3$s]</string>
+    <string name="str_email_subject_with_sim_ts">[%1$s] from %2$s [%3$s] on %4$tR %4$tT</string>
     <string name="str_email_subject_with_name">%1$s from %2$s (%3$s)</string>
-    <string name="str_email_subject_with_name_sim">%1$s from %2$s (%3$s) [%4$s]</string>
+    <string name="str_email_subject_with_name_sim_ts">[%1$s] from %2$s (%3$s) [%4$s] on %4$tR %4$tT</string>
     <string name="str_email_subject_pattern_1">^\\s*(%s\\s+)?SMS\\s+</string>
     <string name="str_email_subject_pattern_2">^\\s*((Re:|Fwd:|Fw:|RE:|FWD:|FW:|Forward:|FORWARD:)\\s+)+(%s\\s+)?SMS\\s+from\\s+</string>
     <string name="str_email_subject_pattern_3">^\\s*((Re:|Fwd:|Fw:|RE:|FWD:|FW:|Forward:|FORWARD:)\\s+)+(%s\\s+)?MMS\\s+from\\s+</string>

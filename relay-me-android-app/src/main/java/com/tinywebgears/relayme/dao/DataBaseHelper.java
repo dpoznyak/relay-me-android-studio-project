@@ -59,8 +59,10 @@ public class DataBaseHelper extends SQLiteOpenHelper
             + TABLE_MESSAGES_COLUMN_PHONE_NUMBER + " text, " + TABLE_MESSAGES_COLUMN_CONTACT_NAME + " text, "
             + TABLE_MESSAGES_COLUMN_BODY + " text, " + TABLE_MESSAGES_COLUMN_TIMESTAMP + " long, "
             + TABLE_MESSAGES_COLUMN_DATE_UPDATED + " long, " + TABLE_MESSAGES_COLUMN_DATE_TRIED + " long, "
-            + TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES + " text, " + TABLE_MESSAGES_COLUMN_STATUS + " text, UNIQUE("
-            + TABLE_MESSAGES_COLUMN_EXTERNAL_ID + ", " + TABLE_MESSAGES_COLUMN_TIMESTAMP + ", " + TABLE_MESSAGES_COLUMN_SUBSCRIPTION_ID + "));";
+            + TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES + " text, "
+            + TABLE_MESSAGES_COLUMN_STATUS + " text, "
+            + TABLE_MESSAGES_COLUMN_SUBSCRIPTION_ID  + " text, UNIQUE("
+            + TABLE_MESSAGES_COLUMN_EXTERNAL_ID + ", " + TABLE_MESSAGES_COLUMN_TIMESTAMP + "));";
 
     public static final String TABLE_LOGENTRIES = "logentries";
     // Primary key

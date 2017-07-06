@@ -160,10 +160,10 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
             if (message.getMessageType() == MessageType.INCOMING)
             {
                 String eventType = getString(message.getEventType().getNameResource());
-                subject = getString(R.string.str_email_subject_with_sim, eventType, message.getPhoneNumber(), simNumber );
+                subject = getString(R.string.str_email_subject_with_sim_ts, eventType, message.getPhoneNumber(), simNumber, message.getTimestamp() );
                 if (StringUtil.nonEmpty(contactName))
-                    subject = getString(R.string.str_email_subject_with_name_sim, eventType, message.getPhoneNumber(),
-                            contactName, simNumber);
+                    subject = getString(R.string.str_email_subject_with_name_sim_ts, eventType, message.getPhoneNumber(),
+                            contactName, simNumber, message.getTimestamp());
                 String prefix = userData.getMessagingConfiguration().getEmailSubjectPrefix();
                 if (!StringUtil.empty(prefix))
                     subject = prefix + " " + subject;

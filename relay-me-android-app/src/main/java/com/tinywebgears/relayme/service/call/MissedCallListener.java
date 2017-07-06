@@ -18,12 +18,23 @@ public class MissedCallListener extends PhoneStateListener
     private String callerPhoneNumber;
     private final AbstractBroadcastReceiver broadcastReceiver;
     private int subscriptionId;
+    private TelephonyManager manager;
 
-    public MissedCallListener(Context context, final AbstractBroadcastReceiver broadcastReceiver, int subscriptionId)
+
+    public MissedCallListener(Context context, final AbstractBroadcastReceiver broadcastReceiver, int subscriptionId, TelephonyManager manager)
+
     {
+        try {
+            this.getClass().getField("mSubId").set(this, subscriptionId);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
         this.context = context;
         this.broadcastReceiver = broadcastReceiver;
         this.subscriptionId = subscriptionId;
+        this.manager = manager;
     }
 
     private String getState(int state)
@@ -46,8 +57,10 @@ public class MissedCallListener extends PhoneStateListener
     {
         super.onCallStateChanged(state, incomingNumber);
 
-        LogStoreHelper.info(MissedCallListener.class, context, "PhoneStateReceiver - state: " + getState(state)
-                + " ringing: " + isRinging);
+       // state = manager.getCallState();
+
+        LogStoreHelper.info(MissedCallListener.class, context, "PhoneStateReceiver [" + subscriptionId + "] - state: " + getState(state)
+                + " caller: " + incomingNumber + " isRinging: " + isRinging);
 
         switch (state)
         {

@@ -235,7 +235,11 @@ public class MessagingIntentService extends BasicMessagingIntentService
     {
         Date lastSmsTimestamp = getLastSmsTimestamp();
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"),
-                new String[] { "_id", "type", "address", "date", "body", "subscription_id" }, "date > ?",
+
+                //new String[] { "_id", "type", "address", "date", "body", "SUBSCRIPTION_ID" }
+                null
+                ,
+                "date > ?",
                 new String[] { Long.toString(lastSmsTimestamp.getTime()) }, "date ASC");
         try
         {
@@ -253,7 +257,7 @@ public class MessagingIntentService extends BasicMessagingIntentService
                         String sender = cursor.getString(cursor.getColumnIndexOrThrow("address"));
                         Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow("date")));
                         String text = cursor.getString(cursor.getColumnIndexOrThrow("body"));
-                        String subId = cursor.getString(cursor.getColumnIndexOrThrow("subscription_id"));
+                        String subId = cursor.getString(cursor.getColumnIndexOrThrow("sub_id"));
 
                         LogStoreHelper.info(this, "SMS " + id + " from " + sender + " arrived on " + date);
                         onAction(EventType.SMS, Long.toString(id), date, sender, text, subId);

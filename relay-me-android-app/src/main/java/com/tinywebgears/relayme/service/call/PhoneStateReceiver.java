@@ -37,15 +37,16 @@ public class PhoneStateReceiver extends AbstractBroadcastReceiver
         }
 
         private void Listen() {
-            TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             SubscriptionManager subManager = SubscriptionManager.from(context);
             List<SubscriptionInfo> subs = subManager.getActiveSubscriptionInfoList();
 
             for (SubscriptionInfo sub: subs) {
 
+                TelephonyManager defaultTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
                 int subscriptionId = sub.getSubscriptionId();
                 if (subListeners.get(subscriptionId) == null) {
-                    MissedCallListener missedCallListener = new MissedCallListener(context, phoneStateReceiver, subscriptionId );
+                    TelephonyManager manager = defaultTelephony.createForSubscriptionId(subscriptionId);
+                    MissedCallListener missedCallListener = new MissedCallListener(context, phoneStateReceiver, subscriptionId, manager );
                     manager.listen(missedCallListener, android.telephony.PhoneStateListener.LISTEN_CALL_STATE);
                     subListeners.put(subscriptionId, missedCallListener);
                 }
@@ -57,7 +58,7 @@ public class PhoneStateReceiver extends AbstractBroadcastReceiver
         Dictionary<Integer, MissedCallListener> subListeners = new Hashtable<>();
     }
 
-    SubHandler handler;
+    static SubHandler handler;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     @Override
