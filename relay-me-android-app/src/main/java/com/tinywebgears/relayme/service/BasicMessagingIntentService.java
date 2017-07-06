@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.telephony.SmsManager;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.util.Log;
 
 import com.codolutions.android.common.util.DateUtil;
@@ -45,6 +47,7 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
     public static final String PARAM_IN_KEY = "in-key";
     public static final String PARAM_IN_NUMBER = "in-number";
     public static final String PARAM_IN_TEXT = "in-text";
+    public static final String PARAM_IN_SUBSCRIPTION_ID = "in-subscription-id";
     public static final String PARAM_IN_MESSAGE_ID = "in-message-id";
     public static final String PARAM_IN_MESSAGE_STATUS = "in-message-status";
     public static final String PARAM_IN_MESSAGE_DATE_TRIED = "in-message-date-tried";
@@ -64,7 +67,7 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
 
     // A new event arrived. Store and try sending it right away.
     protected void onAction(final EventType eventType, final String key, final Date date, final String sender,
-            final String text)
+            final String text, final String subscriptionId)
     {
         LogStoreHelper.info(this, "Event " + eventType + ", key: " + key + ", sender: " + sender + " date: " + date);
         // Is this a control command?
@@ -96,7 +99,7 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
         }
         try
         {
-            Message message = new Message(key, eventType, MessageType.INCOMING, sender, text, date);
+            Message message = new Message(key, eventType, MessageType.INCOMING, sender, text, date, subscriptionId);
             Uri uri = insertMessage(message);
             if (uri != null)
             {
@@ -138,6 +141,15 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
             String subject = "";
             ContactsLoader contactsLoader = new ContactsLoader(getApplicationContext(), userData);
             contactsLoader.loadContacts();
+            String subId = message.getSubscriptionId();
+            String simNumber = "";
+            if (subId != null) {
+                SubscriptionManager subManager = SubscriptionManager.from(this);
+                SubscriptionInfo sub = subManager.getActiveSubscriptionInfo(Integer.parseInt(subId));
+                if (sub != null) {
+                    simNumber = sub.getNumber();
+                }
+            }
             if (StringUtil.empty(message.getPhoneNumber()))
             {
                 Log.d(TAG, "Ignoring message with empty phone number.");
@@ -148,10 +160,10 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
             if (message.getMessageType() == MessageType.INCOMING)
             {
                 String eventType = getString(message.getEventType().getNameResource());
-                subject = getString(R.string.str_email_subject, eventType, message.getPhoneNumber());
+                subject = getString(R.string.str_email_subject_with_sim, eventType, message.getPhoneNumber(), simNumber );
                 if (StringUtil.nonEmpty(contactName))
-                    subject = getString(R.string.str_email_subject_with_name, eventType, message.getPhoneNumber(),
-                            contactName);
+                    subject = getString(R.string.str_email_subject_with_name_sim, eventType, message.getPhoneNumber(),
+                            contactName, simNumber);
                 String prefix = userData.getMessagingConfiguration().getEmailSubjectPrefix();
                 if (!StringUtil.empty(prefix))
                     subject = prefix + " " + subject;
@@ -336,7 +348,7 @@ public abstract class BasicMessagingIntentService extends WakefulIntentService
             else if (message.getStatus() == MessageStatus.PERMANENTLY_FAILED)
                 messageText = getString(R.string.str_email_status_body_failed, message.getBody());
             Message statusMessage = new Message("", EventType.SMS, MessageType.STATUS, message.getPhoneNumber(),
-                    messageText, new Date());
+                    messageText, new Date(), message.getSubscriptionId());
             Uri uri = insertMessage(statusMessage);
             if (uri != null)
             {

@@ -8,6 +8,7 @@ import com.tinywebgears.relayme.common.Constants;
 
 public class Message
 {
+    private final String subscriptionId;
     private long id;
     private final String externalId;
     private final EventType eventType;
@@ -22,13 +23,13 @@ public class Message
     private MessageStatus status;
 
     public Message(String externalId, EventType eventType, MessageType messageType, String phoneNumber, String body,
-            Date date)
+            Date date, String subscriptionId)
     {
-        this(0, externalId, eventType, messageType, phoneNumber, "", body, date, null, null, 0, MessageStatus.NEW);
+        this(0, externalId, eventType, messageType, phoneNumber, "", body, date, subscriptionId, null, null, 0, MessageStatus.NEW);
     }
 
     public Message(long id, String externalId, EventType eventType, MessageType messageType, String phoneNumber,
-            String contactName, String body, Date timestamp, Date dateUpdated, Date dateTried, int tries,
+            String contactName, String body, Date timestamp, String subscriptionId, Date dateUpdated, Date dateTried, int tries,
             MessageStatus status)
     {
         this.id = id;
@@ -43,6 +44,11 @@ public class Message
         this.dateTried = dateTried;
         this.tries = new AtomicInteger(tries);
         this.status = status;
+        this.subscriptionId = subscriptionId;
+    }
+
+    public String getSubscriptionId() {
+        return subscriptionId;
     }
 
     public long getId()
@@ -148,6 +154,7 @@ public class Message
         result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
         result = prime * result + ((tries == null) ? 0 : tries.get());
         result = prime * result + ((eventType == null) ? 0 : eventType.hashCode());
+        result = prime * result + ((subscriptionId == null) ? 0 : subscriptionId.hashCode());
         return result;
     }
 

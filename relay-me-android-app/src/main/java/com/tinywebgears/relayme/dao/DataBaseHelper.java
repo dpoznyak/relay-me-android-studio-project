@@ -44,12 +44,14 @@ public class DataBaseHelper extends SQLiteOpenHelper
     public static final String TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES = "tries";
     // Status of the message
     public static final String TABLE_MESSAGES_COLUMN_STATUS = "status";
+    // Subscription Id
+    public static final String TABLE_MESSAGES_COLUMN_SUBSCRIPTION_ID = "subscription_id";
     // A handy list of all columns
     public static final String[] TABLE_MESSAGES_ALL_COLUMNS = { TABLE_MESSAGES_COLUMN_ID,
             TABLE_MESSAGES_COLUMN_EXTERNAL_ID, TABLE_MESSAGES_COLUMN_EVENT_TYPE, TABLE_MESSAGES_COLUMN_MESSAGE_TYPE,
             TABLE_MESSAGES_COLUMN_PHONE_NUMBER, TABLE_MESSAGES_COLUMN_CONTACT_NAME, TABLE_MESSAGES_COLUMN_BODY,
             TABLE_MESSAGES_COLUMN_TIMESTAMP, TABLE_MESSAGES_COLUMN_DATE_UPDATED, TABLE_MESSAGES_COLUMN_DATE_TRIED,
-            TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES, TABLE_MESSAGES_COLUMN_STATUS };
+            TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES, TABLE_MESSAGES_COLUMN_STATUS, TABLE_MESSAGES_COLUMN_SUBSCRIPTION_ID };
 
     private static final String TABLE_CREATE_SCRIPT_MESSAGES = "create table " + TABLE_MESSAGES + "("
             + TABLE_MESSAGES_COLUMN_ID + " integer primary key autoincrement, " + TABLE_MESSAGES_COLUMN_EXTERNAL_ID
@@ -58,7 +60,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
             + TABLE_MESSAGES_COLUMN_BODY + " text, " + TABLE_MESSAGES_COLUMN_TIMESTAMP + " long, "
             + TABLE_MESSAGES_COLUMN_DATE_UPDATED + " long, " + TABLE_MESSAGES_COLUMN_DATE_TRIED + " long, "
             + TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES + " text, " + TABLE_MESSAGES_COLUMN_STATUS + " text, UNIQUE("
-            + TABLE_MESSAGES_COLUMN_EXTERNAL_ID + ", " + TABLE_MESSAGES_COLUMN_TIMESTAMP + "));";
+            + TABLE_MESSAGES_COLUMN_EXTERNAL_ID + ", " + TABLE_MESSAGES_COLUMN_TIMESTAMP + ", " + TABLE_MESSAGES_COLUMN_SUBSCRIPTION_ID + "));";
 
     public static final String TABLE_LOGENTRIES = "logentries";
     // Primary key

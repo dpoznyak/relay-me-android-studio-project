@@ -10,7 +10,7 @@ import com.tinywebgears.relayme.common.Constants;
 
 public abstract class AbstractBroadcastReceiver extends BroadcastReceiver
 {
-    public void sendNotification(Context context, String action, String sender, String msgText)
+    public void sendNotification(Context context, String action, String sender, String msgText, String subscriptionId)
     {
         LogStoreHelper.info(AbstractBroadcastReceiver.class, context, "Notification " + action + " - from: " + sender
                 + " text: " + StringUtil.shorten(msgText, Constants.MESSAGE_SHORTENING_LENGTH));
@@ -18,6 +18,7 @@ public abstract class AbstractBroadcastReceiver extends BroadcastReceiver
         messagingIntent.setAction(action);
         messagingIntent.putExtra(MessagingIntentService.PARAM_IN_KEY, sender);
         messagingIntent.putExtra(MessagingIntentService.PARAM_IN_NUMBER, sender);
+        messagingIntent.putExtra(MessagingIntentService.PARAM_IN_SUBSCRIPTION_ID, subscriptionId);
         if (!StringUtil.empty(msgText))
             messagingIntent.putExtra(MessagingIntentService.PARAM_IN_TEXT, msgText);
         long actionId = NumberUtil.getRandomNumber();

@@ -17,11 +17,13 @@ public class MissedCallListener extends PhoneStateListener
     private boolean isRinging = false;
     private String callerPhoneNumber;
     private final AbstractBroadcastReceiver broadcastReceiver;
+    private int subscriptionId;
 
-    public MissedCallListener(Context context, final AbstractBroadcastReceiver broadcastReceiver)
+    public MissedCallListener(Context context, final AbstractBroadcastReceiver broadcastReceiver, int subscriptionId)
     {
         this.context = context;
         this.broadcastReceiver = broadcastReceiver;
+        this.subscriptionId = subscriptionId;
     }
 
     private String getState(int state)
@@ -64,7 +66,7 @@ public class MissedCallListener extends PhoneStateListener
                         + callerPhoneNumber);
                 String phoneNumber = StringUtil.empty(callerPhoneNumber) ? NO_CALLER_ID : callerPhoneNumber;
                 broadcastReceiver.sendNotification(context, MessagingIntentService.ACTION_CODE_MISSED_CALL,
-                        phoneNumber, null);
+                        phoneNumber, null, Integer.toString(subscriptionId));
             }
             break;
         default:

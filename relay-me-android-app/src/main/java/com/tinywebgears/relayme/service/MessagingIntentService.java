@@ -64,15 +64,17 @@ public class MessagingIntentService extends BasicMessagingIntentService
         {
             String key = intent.getStringExtra(PARAM_IN_KEY);
             String sender = intent.getStringExtra(PARAM_IN_NUMBER);
+            String subId = intent.getStringExtra(PARAM_IN_SUBSCRIPTION_ID);
             String messageText = getString(R.string.str_you_received_mms);
-            onAction(EventType.MMS, key, new Date(), sender, messageText);
+            onAction(EventType.MMS, key, new Date(), sender, messageText, subId);
         }
         else if (ACTION_CODE_MISSED_CALL.equalsIgnoreCase(action))
         {
             String key = intent.getStringExtra(PARAM_IN_KEY);
             String caller = intent.getStringExtra(PARAM_IN_NUMBER);
+            String subId = intent.getStringExtra(PARAM_IN_SUBSCRIPTION_ID);
             String messageText = getString(R.string.str_you_missed_call);
-            onAction(EventType.MISSED_CALL, key, new Date(), caller, messageText);
+            onAction(EventType.MISSED_CALL, key, new Date(), caller, messageText, subId);
         }
         else if (ACTION_CODE_MESSAGE_TRY.equalsIgnoreCase(action))
         {
@@ -233,7 +235,7 @@ public class MessagingIntentService extends BasicMessagingIntentService
     {
         Date lastSmsTimestamp = getLastSmsTimestamp();
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"),
-                new String[] { "_id", "type", "address", "date", "body" }, "date > ?",
+                new String[] { "_id", "type", "address", "date", "body", "subscription_id" }, "date > ?",
                 new String[] { Long.toString(lastSmsTimestamp.getTime()) }, "date ASC");
         try
         {
@@ -251,8 +253,10 @@ public class MessagingIntentService extends BasicMessagingIntentService
                         String sender = cursor.getString(cursor.getColumnIndexOrThrow("address"));
                         Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow("date")));
                         String text = cursor.getString(cursor.getColumnIndexOrThrow("body"));
+                        String subId = cursor.getString(cursor.getColumnIndexOrThrow("subscription_id"));
+
                         LogStoreHelper.info(this, "SMS " + id + " from " + sender + " arrived on " + date);
-                        onAction(EventType.SMS, Long.toString(id), date, sender, text);
+                        onAction(EventType.SMS, Long.toString(id), date, sender, text, subId);
                         if (DateUtil.isAfter(lastSmsTimestamp, date))
                             userData.setLastSmsTimestamp(date);
                         cursor.moveToNext();
@@ -385,7 +389,7 @@ public class MessagingIntentService extends BasicMessagingIntentService
                 if (messageText.length() > MAX_SMS_MESSAGE_LENGTH)
                     messageText = text.substring(0, MAX_SMS_MESSAGE_LENGTH);
                 Message message = new Message(incomingEmail.getMessageId(), EventType.SMS, MessageType.OUTGOING,
-                        number, messageText, incomingEmail.getDate());
+                        number, messageText, incomingEmail.getDate(), null);
                 Uri uri = insertMessage(message);
                 if (uri != null)
                 {

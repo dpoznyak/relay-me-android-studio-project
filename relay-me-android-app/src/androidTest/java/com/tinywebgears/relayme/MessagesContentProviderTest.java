@@ -25,7 +25,7 @@ public class MessagesContentProviderTest
 {
     private static final String TAG = "MsgContentProviderTest";
     private static final Message sTestMessage = new Message("0123", EventType.SMS, MessageType.INCOMING,
-            "+61-411-123456", "Hello, World!", new Date());
+            "+61-411-123456", "Hello, World!", new Date(), null);
 
     private Context context;
 

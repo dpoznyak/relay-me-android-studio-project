@@ -256,8 +256,10 @@ public class MessagesContentProvider extends ContentProvider
         int tries = cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseHelper.TABLE_MESSAGES_COLUMN_NUMBER_OF_TRIES));
         MessageStatus status = MessageStatus.fromString(cursor.getString(cursor
                 .getColumnIndexOrThrow(DataBaseHelper.TABLE_MESSAGES_COLUMN_STATUS)));
+        String subId = cursor.getString(cursor.getColumnIndexOrThrow(DataBaseHelper.TABLE_MESSAGES_COLUMN_SUBSCRIPTION_ID));
+
         Message message = new Message(id, externalId, eventType, messageType, phoneNumber, contactName, body,
-                messageTimestamp, dateUpdated, dateTried, tries, status);
+                messageTimestamp, subId, dateUpdated, dateTried, tries, status);
         Log.d(TAG, "Message read from cursor: " + message);
         return message;
     }

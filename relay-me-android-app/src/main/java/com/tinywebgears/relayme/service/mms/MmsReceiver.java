@@ -33,7 +33,7 @@ public class MmsReceiver extends AbstractBroadcastReceiver
             }
             for (String msgId : msg.keySet())
                 sendNotification(context, MessagingIntentService.ACTION_CODE_INCOMING_MMS, msg.get(msgId).first,
-                        msg.get(msgId).second);
+                        msg.get(msgId).second, null);
         }
     }
 
